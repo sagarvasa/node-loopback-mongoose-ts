@@ -1,8 +1,15 @@
 import { ApplicationConfig, VendorApplication } from './application';
+import { configFn } from './helpers/config';
 
 export * from './application';
 
 export async function main(options: ApplicationConfig = {}) {
+  // Fetching Configurations before starting applications
+  const env = 'development';
+  const configurations = await configFn(env);
+  global.centralConfig = configurations;
+  global.env = env;
+
   const app = new VendorApplication(options);
   await app.boot();
   await app.start();
@@ -10,6 +17,13 @@ export async function main(options: ApplicationConfig = {}) {
   const url = app.restServer.url;
   console.log(`Server is running at ${url}`);
   console.log(`Try ${url}/ping`);
+
+  // Dynamic import
+  // Establishing connection only after config load and app bootstrap
+  import('./helpers/mongo-connection').then(data => {
+    const { MongoConnectionHelper } = data;
+    new MongoConnectionHelper().establishConnection().catch(() => {});
+  });
 
   return app;
 }
