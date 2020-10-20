@@ -1,4 +1,4 @@
-import { IVendorBaseDocument, IVendorBaseModel, IVendorPopulatedDocument } from '../types/vendor-data';
+import { /*IVendorBaseDocument, IVendorBaseModel,*/ IVendorPopulatedDocument } from '../types/vendor-data';
 import VendorDataModel from '../models/vendor-data.model';
 
 export class VendorDataRepository {
@@ -9,7 +9,7 @@ export class VendorDataRepository {
   }
 
   async createVendorData(body: IVendorPopulatedDocument) {
-    let model = new VendorDataModel(body);
+    const model = new VendorDataModel(body);
     return model.save();
   }
 

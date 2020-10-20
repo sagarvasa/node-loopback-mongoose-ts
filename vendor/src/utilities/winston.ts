@@ -1,11 +1,11 @@
-import { Response } from 'express';
+import { Response } from '@loopback/rest';
 import winston, { transports } from 'winston';
 import util from 'util';
 
 import { Constants } from './constants';
 const env = process.env.NODE_ENV ?? 'local';
 
-let winstonTransport = new transports.Console();
+const winstonTransport = new transports.Console();
 
 const winstonLogger = new winston.Logger({
   transports: [winstonTransport],

@@ -2,12 +2,12 @@ import {
   Request,
   RestBindings,
   get,
-  ResponseObject,
+  //ResponseObject,
   Response,
   param,
   post,
   requestBody,
-  getModelSchemaRef,
+  //getModelSchemaRef,
   put,
 } from '@loopback/rest';
 import { inject, service } from '@loopback/core';
@@ -21,8 +21,8 @@ export class VendorController {
     @service(VendorService) public vendorService: VendorService,
   ) {}
 
-  @get('/vendor/email/status')
-  checkEmailStatus(@param.query.string('email') email: string): object {
+  @get('/vendor/email/status/{email}')
+  checkEmailStatus(@param.path.string('email') email: string): object {
     return this.vendorService.checkEmailStatus(email);
   }
 
@@ -32,8 +32,8 @@ export class VendorController {
   }
 
   @put('/vendor/profile/query/{id}')
-  updateSellerQuery(@param.path.string('id') id: string, @requestBody() body: any) {
-    let query = body['vendorQuery'];
+  updateSellerQuery(@param.path.string('id') id: string, @requestBody() body: { vendorQuery: string }) {
+    const query = body['vendorQuery'];
     return this.vendorService.updateVendorQuery(id, query);
   }
 }

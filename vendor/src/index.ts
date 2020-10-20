@@ -1,5 +1,6 @@
 import { ApplicationConfig, VendorApplication } from './application';
 import { configFn } from './helpers/config';
+import { MySequence } from './sequence';
 
 export * from './application';
 
@@ -20,10 +21,13 @@ export async function main(options: ApplicationConfig = {}) {
 
   // Dynamic import
   // Establishing connection only after config load and app bootstrap
-  import('./helpers/mongo-connection').then(data => {
-    const { MongoConnectionHelper } = data;
-    new MongoConnectionHelper().establishConnection().catch(() => {});
-  });
+  import('./helpers/mongo-connection')
+    .then(data => {
+      data.default.establishConnection().catch(() => {});
+    })
+    .catch(err => {
+      console.error('Error in dynamic importing mongo connection');
+    });
 
   return app;
 }
