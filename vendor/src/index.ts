@@ -1,6 +1,5 @@
 import { ApplicationConfig, VendorApplication } from './application';
 import { configFn } from './helpers/config';
-import { MySequence } from './sequence';
 
 export * from './application';
 

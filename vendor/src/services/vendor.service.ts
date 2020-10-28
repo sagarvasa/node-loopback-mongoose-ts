@@ -1,14 +1,16 @@
+import { Response } from '@loopback/rest';
 import { injectable, /* inject, */ BindingScope } from '@loopback/core';
 import { repository } from '@loopback/repository';
 import { VendorDataRepository } from '../repositories';
 import { IVendorDocument, IVendorPopulatedDocument, EmailStatus, AccountStatus } from '../types/vendor-data';
 import logger from '../utilities/winston';
+import { ErrorConst, CustomError } from '../utilities/errors';
 
 @injectable({ scope: BindingScope.TRANSIENT })
 export class VendorService {
   constructor(@repository(VendorDataRepository) public vendorDataRepository: VendorDataRepository) {}
 
-  async checkEmailStatus(email: string) {
+  async checkEmailStatus(email: string, res: Response) {
     try {
       const vendorData = await this.vendorDataRepository.findVendorByEmail(email);
       const response = {
@@ -35,11 +37,15 @@ export class VendorService {
       }
       return response;
     } catch (error) {
-      logger.put('Error in checkEmailStatus ' + error.message);
+      logger.put('[services][checkEmailStatus][err] ' + error.message, res);
+      throw new CustomError(
+        Number(error.status) || ErrorConst.INTERNAL_SERVER_ERROR,
+        error.message || ErrorConst.GENERAL_ERROR_MSG,
+      );
     }
   }
 
-  async createVendorProfile(body: IVendorDocument) {
+  async createVendorProfile(body: IVendorDocument, res: Response) {
     try {
       const VendorData: IVendorPopulatedDocument = {
         name: body['name'],
@@ -59,11 +65,15 @@ export class VendorService {
       const createdVendor = await this.vendorDataRepository.createVendorData(VendorData);
       return createdVendor;
     } catch (error) {
-      logger.put('Error in checkEmailStatus ' + error.message);
+      logger.put('[services][createSellerProfile][err] ' + error.message, res);
+      throw new CustomError(
+        Number(error.status) || ErrorConst.INTERNAL_SERVER_ERROR,
+        error.message || ErrorConst.GENERAL_ERROR_MSG,
+      );
     }
   }
 
-  async updateVendorQuery(id: string, query: string) {
+  async updateVendorQuery(id: string, query: string, res: Response) {
     try {
       const body = {
         vendorQuery: query,
@@ -71,7 +81,11 @@ export class VendorService {
       const updatedVendor = await this.vendorDataRepository.updateVendorById(id, body);
       return updatedVendor;
     } catch (error) {
-      logger.put('Error in checkEmailStatus ' + error.message);
+      logger.put('[services][updateVendorQuery][err] ' + error.message, res);
+      throw new CustomError(
+        Number(error.status) || ErrorConst.INTERNAL_SERVER_ERROR,
+        error.message || ErrorConst.GENERAL_ERROR_MSG,
+      );
     }
   }
 }
