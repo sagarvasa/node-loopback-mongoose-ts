@@ -13,7 +13,6 @@ interface MongoConfig {
 async function createConnection(dbConfigObj: MongoConfig, options: ConnectionOptions): Promise<Connection> {
   const { host, port, database, username, password } = dbConfigObj;
   let url = 'mongodb://' + username + ':' + password + '@' + host + ':' + port + '/' + database;
-  url = 'mongodb://admin:admin@172.16.240.244:27017/REBEL_METADATA_dev';
 
   let connection: Connection;
   try {
