@@ -17,7 +17,7 @@ Implementation of APIs in node using Loopback 4, Mongoose and Typescript
 curl --location --request GET 'http://localhost:3000/ping'
 
 2. Check Email Status
-curl --location --request GET 'http://localhost:3000/vendor/email/status?email=sagar.vasa12@xyz.com'
+curl --location --request GET 'http://localhost:3000/vendor/email/status/sagar.vasa12@xyz.com'
 
 3. Create Vendor Profile
 curl --location --request POST 'http://localhost:3000/vendor/profile/create' \
